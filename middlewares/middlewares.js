@@ -1,7 +1,6 @@
-function reverse(originalRow) {
+function reverse(splitedRow) {
   let accum = [];
 
-  splitedRow = originalRow.split(",");
   for (i = 0; i < splitedRow.length; i++) {
     accum.push(splitedRow[splitedRow.length - 1 - i]);
   }
@@ -9,9 +8,11 @@ function reverse(originalRow) {
   return accum.join(",");
 }
 
-function isFibonacciRow(originalRow) {
-  let splitedRow = originalRow.split(",");
+function getNumbers(originalRow) {
+  return originalRow.match(/\d+/g);
+}
 
+function isFibonacciRow(splitedRow) {
   if (splitedRow.length < 3) {
     return false;
   }
@@ -40,9 +41,13 @@ function getRestData(req, status, result) {
 function fibonacciReverse(req, res, next) {
   const { row } = req.body;
 
-  req.restData = getRestData(req, isFibonacciRow(row), reverse(row));
+  const splitedRow = getNumbers(row);
 
-  console.log(req.restData);
+  req.restData = getRestData(
+    req,
+    isFibonacciRow(splitedRow),
+    reverse(splitedRow),
+  );
 
   next();
 }
